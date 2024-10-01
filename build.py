@@ -1,16 +1,24 @@
-# build.py
 import os
+import shutil
 
 def build():
-    print("Starting build process...")
+    print("Building the application...")
 
-    try:
-        # Your build logic here
-        print("Generating static files...")
-        os.system("echo 'Static files generated!'")  # Replace with actual build commands
-        print("Build completed successfully.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    # Create the build/web directory if it doesn't exist
+    os.makedirs('build/web', exist_ok=True)
+
+    # Copy HTML files from templates to build/web
+    templates_dir = 'templates'
+    build_dir = 'build/web'
+
+    for filename in os.listdir(templates_dir):
+        if filename.endswith('.html'):
+            src_file = os.path.join(templates_dir, filename)
+            dest_file = os.path.join(build_dir, filename)
+            shutil.copy(src_file, dest_file)
+            print(f"Copied {filename} to {build_dir}")
+
+    print("Build completed successfully.")
 
 if __name__ == "__main__":
     build()
