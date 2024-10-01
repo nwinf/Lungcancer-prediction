@@ -62,18 +62,18 @@ def result():
 
     # Make the prediction
   try:
-        prediction = loaded_model.predict(input_data)
+    prediction = loaded_model.predict(input_data)
 
         # Determine the prediction label
-        if prediction[0] == 0:
-            result = f"{name}, you do not have Lung Cancer"
-        else:
-            result = f"{name}, you have Lung Cancer"
-    except Exception as e:
-        logging.error(f"Error making prediction: {e}")
-        return "Error during prediction", 500
+    if prediction[0] == 0:
+        result = f"{name}, you do not have Lung Cancer"
+    else:
+        result = f"{name}, you have Lung Cancer"
+  except Exception as e:
+    logging.error(f"Error making prediction: {e}")
+    return "Error during prediction", 500
 
-    return render_template('result.html', result=result, name=name)
+return render_template('result.html', result=result, name=name)
 
 if __name__ == '__main__':
     app.run(debug=True)  # Enable debug mode
