@@ -21,7 +21,6 @@ def index():
 
 @app.route('/result', methods=['POST'])
 def result():
-    # Retrieve form data
     # Retrieve form data with validation
     try:
         name = request.form['name']
@@ -44,8 +43,6 @@ def result():
         logging.error(f"Error retrieving form data: {e}")
         return "Invalid input data", 400
 
-    # Load the model
-    #loaded_model = pickle.load(open('model.pkl', 'rb'))
     # Load the model with error handling
     try:
         if not os.path.exists('model.pkl'):
@@ -58,22 +55,24 @@ def result():
         return "Error loading model", 500
 
     # Prepare the input data for prediction
-    input_data = np.array([[GENDER, AGE,SMOKING,YELLOW_FINGERS,ANXIETY,PEER_PRESSURE,CHRONIC_DISEASE,FATIGUE,ALLERGY,WHEEZING, ALCOHOL,COUGHING,SHORTNESS_BREATH,SWALLOWING_DIFFICULTY,CHEST_PAIN]])  # Add other input fields as needed
+    input_data = np.array([[GENDER, AGE, SMOKING, YELLOW_FINGERS, ANXIETY, PEER_PRESSURE, 
+                            CHRONIC_DISEASE, FATIGUE, ALLERGY, WHEEZING, ALCOHOL, 
+                            COUGHING, SHORTNESS_BREATH, SWALLOWING_DIFFICULTY, CHEST_PAIN]])
 
     # Make the prediction
-  try:
-    prediction = loaded_model.predict(input_data)
+    try:
+        prediction = loaded_model.predict(input_data)
 
         # Determine the prediction label
-    if prediction[0] == 0:
-        result = f"{name}, you do not have Lung Cancer"
-    else:
-        result = f"{name}, you have Lung Cancer"
-  except Exception as e:
-    logging.error(f"Error making prediction: {e}")
-    return "Error during prediction", 500
+        if prediction[0] == 0:
+            result = f"{name}, you do not have Lung Cancer"
+        else:
+            result = f"{name}, you have Lung Cancer"
+    except Exception as e:
+        logging.error(f"Error making prediction: {e}")
+        return "Error during prediction", 500
 
-return render_template('result.html', result=result, name=name)
+    return render_template('result.html', result=result, name=name)
 
 if __name__ == '__main__':
     app.run(debug=True)  # Enable debug mode
