@@ -47,7 +47,7 @@ jobs:
         pip install -r requirement.txt
     - name: Build the Web App
       run: |
-        python main.py  
+        timeout 120 python main.py  
 
 
     
